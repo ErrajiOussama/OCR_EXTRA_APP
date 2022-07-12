@@ -1,0 +1,89 @@
+﻿<Window x:Class="OCR_EXTRA_APP.Menu"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OCR_EXTRA_APP"
+        mc:Ignorable="d"
+        Title="Menu1" Height="500" Width="800" Background="WhiteSmoke">
+
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <StackPanel x:Name="sidePanel" Background="Orange" Grid.Column="0" >
+            <Grid >
+
+                <Button x:Name="menu_btn" BorderBrush="Transparent" Background="Transparent"  Margin="100 0 0 5" HorizontalAlignment="Right" VerticalAlignment="Top" Click="menu_btn_Click" Width="50">
+                    <materialDesign:PackIcon Kind="Menu"/>
+                </Button>
+            </Grid>
+
+            <Border Margin="0"
+                        Background="WhiteSmoke"
+                    BorderBrush="Orange"
+                    BorderThickness="0.5">
+                <Image Source="icons/logo.png"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Height="50"
+                       Margin="25"/>
+
+
+            </Border>
+            <ListView Background="Orange">
+                <ListViewItem x:Name="menuEtat_civil"
+                             MouseDoubleClick="menuEtat_civil_MouseDoubleClick"
+                             Padding="0 10"
+                             Foreground="White"
+                              Margin="5 2">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+                        <materialDesign:PackIcon Kind="File" Height="24" Width="24" Margin="0 0 20 0"/>
+                        <TextBlock FontWeight="Bold" ><Run Text="ETAT CIVIL"/></TextBlock>
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem x:Name="menuCorrection"
+                             MouseDoubleClick="menuCorrection_MouseDoubleClick"
+                             Padding="0 10"
+                             Foreground="White" 
+                              Margin="5 2">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+                        <materialDesign:PackIcon Kind="Update" Height="24" Width="24" Margin="0 0 20 0" />
+                        <TextBlock FontWeight="Bold"><Run Text="CORRECTION"/></TextBlock>
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem x:Name="menuOSResation"
+                             MouseDoubleClick="menuCorrection_MouseDoubleClick"
+                             Padding="0 10"
+                             Foreground="White"
+                              Margin="5 2">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+                        <materialDesign:PackIcon Kind="BarcodeScanner" Height="24" Width="24" Margin="0 0 20 0"/>
+                        <TextBlock FontWeight="Bold"><Run Text="OSRISATION"/></TextBlock>
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem x:Name="menuPrametrie"
+                             MouseDoubleClick="menuCorrection_MouseDoubleClick"
+                             Padding="0 10"
+                             Foreground="White"
+                              Margin="5 2">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+                        <materialDesign:PackIcon Kind="Settings" Height="24" Width="24" Margin="0 0 20 0"/>
+                        <TextBlock FontWeight="Bold"><Run Text="PRAMETRIE"/></TextBlock>
+                    </StackPanel>
+                </ListViewItem>
+            </ListView>
+        </StackPanel>
+
+        <Frame Grid.Column="1"
+               Background="WhiteSmoke" 
+               NavigationUIVisibility="Hidden" 
+               x:Name="MainFrame"/>
+    </Grid>
+</Window>
