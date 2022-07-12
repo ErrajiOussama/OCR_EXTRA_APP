@@ -7,8 +7,49 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Etat_Civil">
-
+    <Page.Resources>
+        <ContextMenu x:Key="cmListLot">
+            <MenuItem Header="Actualiser"/>
+            <MenuItem Header="Voir"/>
+        </ContextMenu>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#ff2c3e50"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="1,0,1,2"/>
+        </Style>
+        <Style TargetType="DataGrid">
+            <Setter Property="VerticalGridLinesBrush" Value="#4b6584"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#4b6584"/>
+            <Setter Property="AlternatingRowBackground" Value="#ff2c3e50"/>
+            <Setter Property="RowBackground" Value="#34495e"/>
+            <Setter Property="RowHeaderWidth" Value="0"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
+        </Style>
+    </Page.Resources>
+    
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0"></StackPanel>
+        <DataGrid Name="EmployeesList" Grid.Row="1" 
+                  Margin="10,10,10,10" 
+                  CanUserAddRows="False"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding id}" Width="*" />
+                <DataGridTextColumn Header="Login" Binding="{Binding login}" Width="*"/>
+                <DataGridTextColumn Header="Password" Binding="{Binding password}"  Width="*"/>
+                <DataGridTextColumn Header="Role" Binding="{Binding role}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Page>
