@@ -1,4 +1,5 @@
 ﻿<Page x:Class="OCR_EXTRA_APP.Etat_Civil"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,11 +7,12 @@
       xmlns:local="clr-namespace:OCR_EXTRA_APP"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Etat_Civil">
+      Title="Etat_Civil"
+      Loaded="Page_Loaded">
     <Page.Resources>
         <ContextMenu x:Key="cmListLot">
             <MenuItem Header="Actualiser"/>
-            <MenuItem Header="Voir"/>
+            <MenuItem Header="Voir" Click="MenuItem_Click"/>
         </ContextMenu>
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="#ff2c3e50"/>
@@ -20,7 +22,7 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderBrush" Value="White"/>
-            <Setter Property="BorderThickness" Value="1,0,1,2"/>
+            <Setter Property="BorderThickness" Value="1,0,1,1"/>
         </Style>
         <Style TargetType="DataGrid">
             <Setter Property="VerticalGridLinesBrush" Value="#4b6584"/>
@@ -32,23 +34,36 @@
             <Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
         </Style>
     </Page.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0"></StackPanel>
-        <DataGrid Name="EmployeesList" Grid.Row="1" 
+        <StackPanel Margin=" 10 10 10 10" Width="auto" Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal" Background="Orange">
+            
+            <TextBox Width="150" x:Name="search" Margin=" 200 0 40 0" Background="White"/>
+            <ComboBox Width="100" x:Name="combo" SelectedIndex="0">
+                <ComboBoxItem > Bureau </ComboBoxItem>
+                <ComboBoxItem > Commun </ComboBoxItem>
+                <ComboBoxItem > Lot </ComboBoxItem>
+            </ComboBox>
+            <Button x:Name="Rechercher" BorderBrush="Transparent" Background="Transparent"  Margin="100 0 0 5" HorizontalAlignment="Right" VerticalAlignment="Top" Click="Rechercher_Click" Width="50">
+                <materialDesign:PackIcon Kind="Search"/>
+            </Button>
+
+        </StackPanel>
+        <DataGrid Name="LotsList" Grid.Row="1" 
                   Margin="10,10,10,10" 
                   CanUserAddRows="False"
                   IsReadOnly="True"
                   AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding id}" Width="*" />
-                <DataGridTextColumn Header="Login" Binding="{Binding login}" Width="*"/>
-                <DataGridTextColumn Header="Password" Binding="{Binding password}"  Width="*"/>
-                <DataGridTextColumn Header="Role" Binding="{Binding role}" Width="*"/>
+                <DataGridTextColumn Header="commune" Binding="{Binding id_commune}" Width="*" />
+                <DataGridTextColumn Header="bureau" Binding="{Binding id_bureau}" Width="*"/>
+                <DataGridTextColumn Header="lot" Binding="{Binding id_lot}" Width="*"/>
+                <DataGridTextColumn Header="nb_actes" Binding="{Binding nb_actes}" Width="*"/>
+                <DataGridTextColumn Header="status_lot" Binding="{Binding status_lot}" Width="70"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

@@ -92,7 +92,8 @@ namespace OCR_EXTRA_APP
                     MainFrame.Navigate(paramatrie);
                 }
             }
-            private void Timer_Tick(object sender, EventArgs e)
+       
+        private void Timer_Tick(object sender, EventArgs e)
             {
                 if (hidden)
                 {

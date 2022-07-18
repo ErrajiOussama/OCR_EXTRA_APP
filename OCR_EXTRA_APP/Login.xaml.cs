@@ -2,6 +2,7 @@
 using Npgsql;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Windows;
 
 namespace OCR_EXTRA_APP
@@ -33,13 +34,14 @@ namespace OCR_EXTRA_APP
                 using (NpgsqlConnection conn = new NpgsqlConnection(_connexionString))
                 {
                     conn.Open();
-                    var sqlLogin = $"select * from Compte where login=@login AND password=@password;";
-                    using (NpgsqlCommand npgsqlCommand = new NpgsqlCommand(sqlLogin, conn))
+                    
+                    var sql = (new StreamReader(@"SQL/User.sql")).ReadToEnd();
+                    using (var cmd = new NpgsqlCommand(sql, conn))
                     {
-                        npgsqlCommand.Parameters.Add(new NpgsqlParameter("@login", UserName.Text.Trim()));
-                        npgsqlCommand.Parameters.Add(new NpgsqlParameter("@password", Password.Password.Trim()));
+                        cmd.Parameters.Add(new NpgsqlParameter("@login", UserName.Text.Trim()));
+                        cmd.Parameters.Add(new NpgsqlParameter("@password", Password.Password.Trim()));
 
-                        var reader = npgsqlCommand.ExecuteReader();
+                        var reader = cmd.ExecuteReader();
 
                         if (reader.HasRows)
                         {
@@ -51,6 +53,8 @@ namespace OCR_EXTRA_APP
                             MessageBox.Show("erreur login ou mdp");
                     }
                 }
+                    
+                
             }
             catch (Exception ex)
             {

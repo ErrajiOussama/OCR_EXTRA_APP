@@ -1,0 +1,1 @@
+﻿select * from Compte where login=@login AND password=@password
