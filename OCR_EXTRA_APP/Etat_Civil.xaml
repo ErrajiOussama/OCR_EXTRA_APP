@@ -11,8 +11,8 @@
       Loaded="Page_Loaded">
     <Page.Resources>
         <ContextMenu x:Key="cmListLot">
-            <MenuItem Header="Actualiser"/>
-            <MenuItem Header="Voir" Click="MenuItem_Click"/>
+            <MenuItem Header="Actualiser" Click="Actualiser_Btn"/>
+            <MenuItem Header="Voir" Click="Voir_Btn"/>
         </ContextMenu>
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="#ff2c3e50"/>

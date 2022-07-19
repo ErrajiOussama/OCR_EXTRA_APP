@@ -1,4 +1,9 @@
 {
   "ConnexionString": "Host=localhost;Port=5432;Username=postgres;Password=Yayo_565690;Database=ec_ocr_db",
-  "ConnexionString2": "Host=localhost;Port=5432;Username=postgres;Password=Yayo_565690;Database=Test"
+  "ConnexionString2": "Host=localhost;Port=5432;Username=postgres;Password=Yayo_565690;Database=Test",
+  "ConnexionString3": "Host=localhost;Port=5432;Username=postgres;Password=Yayo_565690;Database=EC_Extra",
+  "ListPaths": [
+    "C:\\Users\\USER\\Documents\\imagesECNew\\72",
+    "C:\\Users\\USER\\Documents\\imagesEC\\72"
+  ]
 }

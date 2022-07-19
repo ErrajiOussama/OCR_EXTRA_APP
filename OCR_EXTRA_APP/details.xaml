@@ -32,9 +32,7 @@
     <Grid>
         <StackPanel Grid.Row="0"
                 Background="#ff2c3e50"
-                Orientation="Horizontal"
-                >
-            
+                Orientation="Horizontal">
         </StackPanel>
 
         <Grid Grid.Row="1"
@@ -46,57 +44,58 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <GridSplitter BorderBrush="LightGray"
-                          BorderThickness="0 0 2 0"
+                          BorderThickness="4 4 4 4"
                           Grid.Column="0">
 
             </GridSplitter>
             <GridSplitter BorderBrush="LightGray"
-                          BorderThickness="0 0 2 0"
+                          BorderThickness="4 4 4 4"
                           Grid.Column="1">
 
             </GridSplitter>
-            
-                <StackPanel Grid.Column="0"
-                        Margin="0 0 2 0">
-                <TreeView>
-                    <TextBlock x:Name="txtLotTitre" 
-                                    
-                                    Foreground="White" 
-                                    FontWeight="Bold" 
-                                    VerticalAlignment="Center"
-                                    HorizontalAlignment="Center"
-                                    FontSize="17"
-                                    Margin="20 0"/>
-                    <TreeViewItem Background="#ff2c3e50">
-                       
-                    </TreeViewItem>
-                    <TreeViewItem>
-                    <DataGrid x:Name="Actes"
-                          AutoGenerateColumns="False"
-                          IsReadOnly="True"
-                          CanUserAddRows="False"
->
-                        <DataGrid.Columns>
-                            <DataGridTextColumn  Header="Id acte" Width="*" Binding="{Binding id_acte}"/>
-                            <DataGridTextColumn  Header="Numero acte" Width="*" Binding="{Binding num_acte}"/>
-                            <DataGridTextColumn  Header="Imagepath" Width="*" Binding="{Binding imagepath}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    </TreeViewItem>
+
+            <StackPanel Grid.Column="0"
+                        Margin="0 0 2 0"
+                        x:Name="TreeActesLotsParent">
+                <TreeView x:Name="TreeActesLots"
+                        ScrollViewer.CanContentScroll="True"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        MaxHeight="{Binding ActualHeight,ElementName=TreeActesLotsParent}"
+                          >
+                    <!--<TreeView.Resources>
+                        <Style TargetType="{x:Type TreeViewItem}">
+                            <Setter Property="HeaderTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <TextBlock x:Name=" txtLotTitre" FontSize="12"/>
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </TreeView.Resources>-->
                 </TreeView>
             </StackPanel>
 
             <DocumentViewer x:Name="ouvrirImage"
                             Grid.Column="1"
-                            Margin="0 0 2 0">
+                            Margin="4 4 4 4">
 
             </DocumentViewer>
 
-            <StackPanel Grid.Column="2">
-                <DataGrid >
+            <StackPanel Grid.Column="2"
+                        ScrollViewer.CanContentScroll="True"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        x:Name="dgChampParent">
+                <DataGrid  x:Name="Champ"
+                           AutoGenerateColumns="False"
+                           IsReadOnly="True"                           
+                           ScrollViewer.CanContentScroll="True"
+                           ScrollViewer.VerticalScrollBarVisibility="Auto"
+                           MaxHeight="{Binding ActualHeight,ElementName=dgChampParent}"
+                           CanUserAddRows="False">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Champs" Binding="{Binding Nom_champ}" Width="*"/>
-                        <DataGridTextColumn Header="resulta" Binding="{Binding resultat}" Width="*"/>
+                        <DataGridTextColumn Header="Champs" Binding="{Binding Champ}" Width="*"/>
+                        <DataGridTextColumn Header="Valeurs" Binding="{Binding Valeur}" Width="*"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>

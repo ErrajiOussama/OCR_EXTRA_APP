@@ -67,7 +67,7 @@ namespace OCR_EXTRA_APP
                     //        break;
                     //}
 
-                    //var sql = (new StreamReader(@"SQL/chercher.sql")).ReadToEnd().Replace("@type",type_value).Replace("@valeur",$"'%{search.Text.Trim()}%'");
+                    //var sql = (new StreamReader(@"SQL/search_from_type.sql")).ReadToEnd().Replace("@type",type_value).Replace("@valeur",$"'%{search.Text.Trim()}%'");
                     //using (var dataAdapter = new NpgsqlDataAdapter(sql, _connexionString))
                     //{                    
                     //    DataTable dataTable = new DataTable();
@@ -97,7 +97,7 @@ namespace OCR_EXTRA_APP
                 ContextMenu menuListLot = this.FindResource("cmListLot") as ContextMenu;
                 LotsList.ContextMenu = menuListLot;
 
-                var sql = (new StreamReader(@"SQL/Etat_civil.sql")).ReadToEnd();
+                var sql = (new StreamReader(@"SQL/Get_Lots.sql")).ReadToEnd();
                 using (var npgsqlDataAdapter = new NpgsqlDataAdapter(sql, _connexionString))
                 {
                     _dataTableListLot = new DataTable();
@@ -112,7 +112,7 @@ namespace OCR_EXTRA_APP
             }
         }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        private void Voir_Btn(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -127,6 +127,11 @@ namespace OCR_EXTRA_APP
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void Actualiser_Btn(object sender, RoutedEventArgs e)
+        {
+            LotsList.ItemsSource = _dataTableListLot.DefaultView;
         }
     }
 }

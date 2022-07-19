@@ -35,7 +35,7 @@ namespace OCR_EXTRA_APP
                 {
                     conn.Open();
                     
-                    var sql = (new StreamReader(@"SQL/User.sql")).ReadToEnd();
+                    var sql = (new StreamReader(@"SQL/Get_User.sql")).ReadToEnd();
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {
                         cmd.Parameters.Add(new NpgsqlParameter("@login", UserName.Text.Trim()));

@@ -1,0 +1,1 @@
+﻿select id_com from match_idbec where id_bec = @id_bec
