@@ -42,7 +42,7 @@
         </Grid.RowDefinitions>
         <StackPanel Margin=" 10 10 10 10" Width="auto" Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal" Background="Orange">
             
-            <TextBox Width="150" x:Name="search" Margin=" 200 0 40 0" Background="White"/>
+            <TextBox KeyUp="search_KeyUp" Width="150" x:Name="search" Margin=" 200 0 40 0" Background="White"/>
             <ComboBox Width="100" x:Name="combo" SelectedIndex="0">
                 <ComboBoxItem > Bureau </ComboBoxItem>
                 <ComboBoxItem > Commun </ComboBoxItem>

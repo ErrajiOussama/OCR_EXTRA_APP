@@ -56,8 +56,8 @@
                         <TextBlock FontWeight="Bold"><Run Text="CORRECTION"/></TextBlock>
                     </StackPanel>
                 </ListViewItem>
-                <ListViewItem x:Name="menuOSResation"
-                             MouseDoubleClick="menuCorrection_MouseDoubleClick"
+                <ListViewItem x:Name="menudOSResation"
+                             MouseDoubleClick="menuOSResation_MouseDoubleClick"
                              Padding="0 10"
                              Foreground="White"
                               Margin="5 2">
@@ -68,7 +68,7 @@
                     </StackPanel>
                 </ListViewItem>
                 <ListViewItem x:Name="menuPrametrie"
-                             MouseDoubleClick="menuCorrection_MouseDoubleClick"
+                             MouseDoubleClick="menuPrametrie_MouseDoubleClick"
                              Padding="0 10"
                              Foreground="White"
                               Margin="5 2">

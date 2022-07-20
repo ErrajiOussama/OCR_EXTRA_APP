@@ -6,8 +6,9 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Linq;
-using System.Diagnostics;
 using System.Collections.Generic;
+using System.Windows.Media.Imaging;
+using System.Windows.Documents;
 
 namespace OCR_EXTRA_APP
 {
@@ -81,13 +82,35 @@ namespace OCR_EXTRA_APP
             #endregion
         }
 
+        private void openImage(string[] path)
+        {
+            FixedDocument fixedDocument = new FixedDocument();
+            foreach (string file in path)
+            {
+                if(file != null)
+                {
+                    System.Windows.Media.ImageSource imageSource = BitmapFrame.Create(new Uri(file), BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
+                    Image image = new Image();
+                    image.Source = imageSource;
+                    FixedPage fixedPage = new FixedPage();
+                    fixedPage.Width = imageSource.Width;
+                    fixedPage.Height = imageSource.Height;
+                    fixedPage.Children.Add(image);            
+                    PageContent pageContent = new PageContent();
+                    pageContent.Child = fixedPage;
+                    fixedDocument.Pages.Add(pageContent);
+                }
+            }
+            ouvrirImage.Document = fixedDocument;
+        }
         private void TreeViewItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             #region recuperer les donner de l'id acte choisis par le utilisateur
             try
             {
-                Trace.WriteLine(getPathLot(_id_lot, _Extra));
+                
                 var id_acte = ((sender as TreeViewItem).Tag as DataRow)["id_acte"].ToString();
+                var path_image = ((sender as TreeViewItem).Tag as DataRow)["imagepath"].ToString();
                 var sql2 = (new StreamReader(@"SQL/Get_Actes.sql")).ReadToEnd().Replace("@acte", id_acte);
                 using (var dataAdapter = new NpgsqlDataAdapter(sql2, _connexionString))
                 {
@@ -99,7 +122,20 @@ namespace OCR_EXTRA_APP
                         actefieldSchemats.Add(new ActefieldSchemat() { Champ = cl.ToString(), Valeur = dt.Rows[0][cl.ToString()].ToString() });
                     }
                     Champ.ItemsSource =  actefieldSchemats;
+                    string[] path_image1=path_image.Split(";;");
+                    string cheminRacine = getPathLot(_id_lot, _Extra);
+                    if (path_image1.Length == 1) {
+                        string imagepath1 = Path.Combine(getPathLot(_id_lot, _Extra), path_image1[0]);
+                        openImage(new string[] { imagepath1 });
+                    }
+                    else 
+                    {
+                        string imagepath1 = Path.Combine(getPathLot(_id_lot, _Extra), path_image1[0]);
+                        string imagepath2 = Path.Combine(getPathLot(_id_lot, _Extra), path_image1[1]);
+                        openImage(new string[] { imagepath1,imagepath2 });
+                    }
                 }
+              
             }
             catch (Exception ex)
             {
