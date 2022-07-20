@@ -39,8 +39,15 @@
         </Grid.RowDefinitions>
         <StackPanel Margin=" 10 10 10 10" Width="auto"  Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal" Background="#ff2c3e50">
 
-           
-            <ComboBox KeyUp="combo_KeyUp" Width="100" VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="Transparent" x:Name="combo" SelectedIndex="0">
+
+            <TextBox KeyUp="search_KeyUp"  BorderBrush="Transparent" Width="150" x:Name="search" Margin=" 200 0 40 0" Background="White"/>
+            <ComboBox Width="100" x:Name="combo2"  BorderBrush="Transparent" SelectedIndex="0">
+                <ComboBoxItem >Bureau</ComboBoxItem>
+                <ComboBoxItem >Commun</ComboBoxItem>
+                <ComboBoxItem >Lot</ComboBoxItem>
+            </ComboBox>
+            
+            <ComboBox  Width="100"  VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="Transparent" x:Name="combo" SelectedIndex="0">
                 <ComboBoxItem HorizontalAlignment="Center">OCR</ComboBoxItem>
                 <ComboBoxItem HorizontalAlignment="Center">Non_OCR</ComboBoxItem>
                 
