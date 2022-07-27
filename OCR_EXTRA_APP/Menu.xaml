@@ -7,17 +7,41 @@
         xmlns:local="clr-namespace:OCR_EXTRA_APP"
         mc:Ignorable="d"
         Title="Menu1" Height="500" Width="800" Background="WhiteSmoke">
-
+    <Window.Resources>
+        <Storyboard x:Key="OpenMenu">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="150"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="40"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="CloseMenu">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="40"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="150"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonOpenMenu">
+            <BeginStoryboard Storyboard="{StaticResource OpenMenu}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonCloseMenu">
+            <BeginStoryboard Storyboard="{StaticResource CloseMenu}"/>
+        </EventTrigger>
+    </Window.Triggers>
     <Grid >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <StackPanel x:Name="sidePanel" Background="Orange" Grid.Column="0" >
+        <StackPanel x:Name="GridMenu"   Background="Orange"   >
             <Grid >
 
-                <Button x:Name="menu_btn" BorderBrush="Transparent" Background="Transparent"  Margin="100 0 0 5" HorizontalAlignment="Right" VerticalAlignment="Top" Click="menu_btn_Click" Width="50">
-                    <materialDesign:PackIcon Kind="Menu"/>
+                <Button x:Name="ButtonOpenMenu" Height="40" Width="40" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" Click="ButtonOpenMenu_Click">
+                    <materialDesign:PackIcon Kind="Menu" Width="25" Height="25"/>
+                </Button>
+                <Button x:Name="ButtonCloseMenu" Visibility="Collapsed" Height="60" Width="40" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" Click="ButtonCloseMenu_Click">
+                    <materialDesign:PackIcon Kind="ArrowLeft" Width="25" Height="25"/>
                 </Button>
             </Grid>
 
@@ -33,7 +57,7 @@
 
 
             </Border>
-            <ListView Background="Orange">
+            <ListView x:Name="ListViewMenu"   Background="Orange">
                 <ListViewItem x:Name="menuEtat_civil"
                              MouseDoubleClick="menuEtat_civil_MouseDoubleClick"
                              Padding="0 10"

@@ -13,7 +13,7 @@
     <Page.Resources>
         <ContextMenu x:Key="cmListLotS">
             <MenuItem Header="Actualiser" Click="Actualiser_Click"/>
-            <MenuItem Header="Ocriser" Click="Ocriser_Click"/>
+            <MenuItem Header="Ocriser" Click="lunchOCR_Click"/>
         </ContextMenu>
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="#ff2c3e50"/>
@@ -45,13 +45,13 @@
 
 
             <TextBox KeyUp="search_KeyUp"  BorderBrush="Transparent" Width="120" x:Name="search" Margin=" 200 0 40 0" Background="White"/>
-            <ComboBox Width="100" Foreground="White" x:Name="combo2"  BorderBrush="Transparent" SelectedIndex="0">
+            <ComboBox Width="100"  x:Name="combo2"  BorderBrush="Transparent" SelectedIndex="0">
                 <ComboBoxItem >Bureau</ComboBoxItem>
                 <ComboBoxItem >Commun</ComboBoxItem>
                 <ComboBoxItem >Lot</ComboBoxItem>
             </ComboBox>
             
-            <ComboBox  Width="80" Foreground="White"  VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="Transparent" x:Name="combo" SelectedIndex="0">
+            <ComboBox  Width="80" Foreground="White"  VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="Transparent" x:Name="combo" SelectedIndex="1">
                 <ComboBoxItem HorizontalAlignment="Center">OCR</ComboBoxItem>
                 <ComboBoxItem HorizontalAlignment="Center">Non_OCR</ComboBoxItem>
                 

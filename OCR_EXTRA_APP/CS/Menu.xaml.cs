@@ -18,21 +18,24 @@ namespace OCR_EXTRA_APP
     /// </summary>
     public partial class Menu : Window
     {
-        DispatcherTimer timer;
-
-        double panelWidth;
-        bool hidden;
+        
         Etat_Civil etat_civil;
         Correction correction;
         OSRisation ocrisation;
         Parametre paramatrie;
-        public Menu()
+        private void ButtonOpenMenu_Click(object sender, RoutedEventArgs e)
         {
-            timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 10);
-            timer.Tick += Timer_Tick;
+            ButtonCloseMenu.Visibility = Visibility.Visible;
+            ButtonOpenMenu.Visibility = Visibility.Collapsed;
+        }
 
-            
+        private void ButtonCloseMenu_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonCloseMenu.Visibility = Visibility.Collapsed;
+            ButtonOpenMenu.Visibility = Visibility.Visible;
+        }
+        public Menu()
+        {   
             InitializeComponent();
         }
             private void initColor()
@@ -93,44 +96,5 @@ namespace OCR_EXTRA_APP
                 }
             }
        
-        private void Timer_Tick(object sender, EventArgs e)
-            {
-                if (hidden)
-                {
-                    sidePanel.Width += 1;
-                    if (sidePanel.Width >= panelWidth)
-                    {
-                        timer.Stop();
-                        hidden = false;
-                    }
-                }
-                else
-                {
-                    sidePanel.Width -= 1;
-                    if (sidePanel.Width <= 35)
-                    {
-                        timer.Stop();
-                        hidden = true;
-                    }
-                }
-            }
-
-            private void Button_Click(object sender, RoutedEventArgs e)
-            {
-                timer.Start();
-            }
-
-            private void PanelHeader_MouseDown(object sender, MouseButtonEventArgs e)
-            {
-                if (e.LeftButton == MouseButtonState.Pressed)
-                {
-                    DragMove();
-                }
-            }
-
-            private void menu_btn_Click(object sender, RoutedEventArgs e)
-            {
-
-            }
-        }
+    }
     }

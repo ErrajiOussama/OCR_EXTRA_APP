@@ -18,6 +18,7 @@ namespace OCR_EXTRA_APP
         
         DataTable _dataTableListLot;
         string _connexionString = "";
+
         public Etat_Civil()
         {           
             InitializeComponent();

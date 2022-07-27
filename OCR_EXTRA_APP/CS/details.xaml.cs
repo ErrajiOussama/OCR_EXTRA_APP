@@ -9,6 +9,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 using System.Windows.Documents;
+using System.Diagnostics;
 
 namespace OCR_EXTRA_APP
 {
@@ -31,7 +32,7 @@ namespace OCR_EXTRA_APP
             {
                 var builder = new ConfigurationBuilder().AddJsonFile($"./config.json").Build();
                 _connexionString = builder["ConnexionString2"];
-                _pathImageRepository = builder.GetSection("ListPaths").GetChildren().AsEnumerable().Select(e=>e.Value).ToArray<string>();
+                _pathImageRepository = builder.GetSection("ListPaths").GetChildren().AsEnumerable().Select(e => e.Value).ToArray<string>();
                 _Extra = builder["ConnexionString3"];
             }
             catch (Exception ex)
@@ -60,6 +61,7 @@ namespace OCR_EXTRA_APP
                     
                     DataTable dataTable = new DataTable();
                     dataAdapter.Fill(dataTable);
+                    
 
                     TreeViewItem LotTree = new TreeViewItem();
                     LotTree.Header = _id_lot;
@@ -87,8 +89,8 @@ namespace OCR_EXTRA_APP
             FixedDocument fixedDocument = new FixedDocument();
             foreach (string file in path)
             {
-                if(file != null)
-                {
+                if(!string.IsNullOrEmpty(file) && File.Exists(file))
+                {                  
                     System.Windows.Media.ImageSource imageSource = BitmapFrame.Create(new Uri(file), BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
                     Image image = new Image();
                     image.Source = imageSource;
@@ -99,6 +101,10 @@ namespace OCR_EXTRA_APP
                     PageContent pageContent = new PageContent();
                     pageContent.Child = fixedPage;
                     fixedDocument.Pages.Add(pageContent);
+                }
+                else
+                {
+                    MessageBox.Show("Chemin introuvable");
                 }
             }
             ouvrirImage.Document = fixedDocument;
@@ -122,16 +128,19 @@ namespace OCR_EXTRA_APP
                         actefieldSchemats.Add(new ActefieldSchemat() { Champ = cl.ToString(), Valeur = dt.Rows[0][cl.ToString()].ToString() });
                     }
                     Champ.ItemsSource =  actefieldSchemats;
-                    string[] path_image1=path_image.Split(";;");
-                    string cheminRacine = getPathLot(_id_lot, _Extra);
+                    string[] path_image1=path_image.Split(";;").Where(e=> !string.IsNullOrWhiteSpace(e)).ToArray();
+                    Acces_Images acces_images= new Acces_Images();
+                    string cheminRacine = acces_images.getPathLot(_id_lot, _Extra, _pathImageRepository);
+                    Trace.WriteLine(path_image);
+                    Trace.WriteLine(cheminRacine);
                     if (path_image1.Length == 1) {
-                        string imagepath1 = Path.Combine(getPathLot(_id_lot, _Extra), path_image1[0]);
+                        string imagepath1 = Path.Combine(acces_images.getPathLot(_id_lot, _Extra, _pathImageRepository), path_image1[0]);
                         openImage(new string[] { imagepath1 });
                     }
                     else 
                     {
-                        string imagepath1 = Path.Combine(getPathLot(_id_lot, _Extra), path_image1[0]);
-                        string imagepath2 = Path.Combine(getPathLot(_id_lot, _Extra), path_image1[1]);
+                        string imagepath1 = Path.Combine(acces_images.getPathLot(_id_lot, _Extra, _pathImageRepository), path_image1[0]);
+                        string imagepath2 = Path.Combine(acces_images.getPathLot(_id_lot, _Extra, _pathImageRepository), path_image1[1]);
                         openImage(new string[] { imagepath1,imagepath2 });
                     }
                 }
@@ -151,60 +160,6 @@ namespace OCR_EXTRA_APP
         }
 
 
-        public string getPathLot(string idLot, string cs)
-        {
-            try
-            {
-                // récupération du chemin du lot 
-                // formatage des informations
-                // exemple format -- '1 2012 001 2403 03'
-                string typlot = (idLot[0].ToString() == "1") ? "NA" : (idLot[0].ToString() == "2") ? "DE" : (idLot[0].ToString() == "3") ? "JM" : (idLot[0].ToString() == "4") ? "TR" : "ER";
-                string annee = idLot[1].ToString() + idLot[2] + idLot[3] + idLot[4];
-                string tome = idLot[5].ToString() + idLot[6] + idLot[7];
-                string idbec = idLot[8].ToString() + idLot[9] + idLot[10] + idLot[11];
-                string indice = idLot[12].ToString();
-                string idcom = "";
-                string tome_indice = (indice == "0") ? Int32.Parse(tome).ToString() : Int32.Parse(tome) + "_" + indice;
-
-                // récupération du com
-                using (var con = new NpgsqlConnection(cs))
-                {
-                    con.Open();
-
-                    var sql = (new StreamReader(@"SQL/recupIdComExtraDb.sql")).ReadToEnd().Replace("@id_bec", idbec);
-
-                    using (var cmd = new NpgsqlCommand(sql, con))
-                    {
-                        var resCom = cmd.ExecuteReader();
-                        while (resCom.Read())
-                        {
-                            idcom = resCom["id_com"].ToString();
-                        }
-                        resCom.Close();
-                    }
-                }                
-
-                // formatage du chemin et retour
-                string[] ListPathImages = _pathImageRepository.ToArray();
-
-                for (int i = 0; i < ListPathImages.Length; i++)
-                {
-                    if (Directory.Exists(Path.Combine(ListPathImages[i], idcom, idbec, annee, typlot, tome_indice)))
-                    {
-                        ListPathImages[i] = Path.Combine(ListPathImages[i], idcom, idbec, annee, typlot, tome_indice);
-                    }
-                    else
-                    {
-                        ListPathImages[i] = "";
-                    }
-                }
-
-                return (ListPathImages.FirstOrDefault(p => !string.IsNullOrWhiteSpace(p)) != null) ? ListPathImages.FirstOrDefault(p => !string.IsNullOrWhiteSpace(p)) : "";
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+       
     }
 }
