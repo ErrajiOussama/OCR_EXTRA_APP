@@ -31,6 +31,9 @@
     <None Update="config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="SQL\Get_delimitateur.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="SQL\Get_random_acte.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

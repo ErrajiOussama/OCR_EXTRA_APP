@@ -1,12 +1,16 @@
 ﻿using Google.Cloud.Vision.V1;
+using Microsoft.Extensions.Configuration;
 using System;
+using System.Data;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using Npgsql;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
+using OCR_EXTRA_APP.models;
 
 namespace OCR_EXTRA_APP.CS
 {
@@ -14,9 +18,29 @@ namespace OCR_EXTRA_APP.CS
     {
         public Delimitateur GetExtraction_delimitateur (string[] acte_ocriser)
         {
+            string _connexionbase = "";
 
-            
-            return  new Delimitateur();
+            try
+            {
+                var builder = new ConfigurationBuilder().AddJsonFile($"./config.json").Build();
+                _connexionbase = builder["ConnexionString"];
+                var sql = (new StreamReader(@"SQL/Get_delimitateur.sql")).ReadToEnd();
+                using (var npgadapter= new NpgsqlDataAdapter(sql, _connexionbase))
+                {
+                    DataTable dt = new DataTable();
+                    npgadapter.Fill(dt);
+                    foreach(DataRow dr in dt.Rows)
+                    {
+                        if (dr["mot_cles"].ToString() == String.Join("\n", acte_ocriser)) ;
+                    }
+                }
+                
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return  ;
         }
         public static async Task<string[]> getOCRImage(string pathimage)
         {
