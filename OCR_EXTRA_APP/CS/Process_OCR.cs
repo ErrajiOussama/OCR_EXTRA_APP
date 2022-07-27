@@ -12,10 +12,11 @@ namespace OCR_EXTRA_APP.CS
 {
     internal class Process_OCR
     {
-        public string GetModel(string[] acte_ocriser)
+        public Delimitateur GetExtraction_delimitateur (string[] acte_ocriser)
         {
+
             
-            return "hello";
+            return  new Delimitateur();
         }
         public static async Task<string[]> getOCRImage(string pathimage)
         {
