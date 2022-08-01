@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using Image = Google.Cloud.Vision.V1.Image;
 using OCR_EXTRA_APP.CS;
+using OCR_EXTRA_APP.models;
 
 namespace OCR_EXTRA_APP
 {
@@ -172,7 +173,7 @@ namespace OCR_EXTRA_APP
             try
             {
                 DataRowView dataRow = LotsList.SelectedItem as DataRowView;
-                string _id_lot = dataRow["id_lot"].ToString();
+                string _id_lot = dataRow["id_Lot"].ToString();
                 string _path_image_acte = "";
                 string id_acte = "";
                 var builder = new ConfigurationBuilder().AddJsonFile($"./config.json").Build();
@@ -195,7 +196,7 @@ namespace OCR_EXTRA_APP
                     string[] path_image1 = _path_image_acte.Split(";;").Where(e => !string.IsNullOrWhiteSpace(e)).ToArray();
                     if (path_image1.Length == 1)
                     {
-                        string[] resultat1 = await Process_OCR.getOCRImage(Path.Combine(_path, path_image1[0]));
+                        string[] resultat1 =  await Process_OCR.getOCRImage(Path.Combine(_path, path_image1[0]));
                         File.WriteAllText(Path.Combine(_pathTexte[0], $"{_id_lot}_{id_acte}_{path_image1[0].Replace("jpg","txt")}"), string.Join("\n", resultat1));
                     }
                     else
@@ -206,16 +207,21 @@ namespace OCR_EXTRA_APP
                         string[] resultat3 = await Process_OCR.getOCRImage(Path.Combine(_path, imagepath2));
                         string Actes = _id_lot + imagepath1.Replace("jpg", "txt");
                         string first_path = Path.Combine(Path.Combine(_pathTexte[0],Actes ));
-                        string second_path = Path.Combine(Path.Combine(_pathTexte[0], _id_lot + "_" +imagepath2.Replace("jpg", "txt")));
+                        string second_path = Path.Combine(Path.Combine(_pathTexte[0], _id_lot + "_" + imagepath2.Replace("jpg", "txt")));
+
                         File.WriteAllText(first_path, string.Join("\n", resultat2));
                         File.WriteAllText(second_path, string.Join("\n", resultat3));
+                        Process_OCR.Get_model(resultat3,2);
+                        
                     }
+                    
                 }
                 else
                 {
                     MessageBox.Show("Charger une image", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
+            
             catch (Exception ex)
             {
                     Trace.WriteLine(ex);

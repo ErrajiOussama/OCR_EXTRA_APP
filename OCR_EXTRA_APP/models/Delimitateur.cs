@@ -6,15 +6,17 @@ namespace OCR_EXTRA_APP.models
 {
     internal class Delimitateur
     {
-        private int id { get; set; }
-        private string mot_cles { get; set; }
-        private string lang { get; set; }
+        public int id { get; private set; }
+        public string mot_cles { get; private set; }
+        public string lang { get; private set; }
 
-        public Delimitateur(int id, string mot_cles, string lang)
+        public int position { get; private set; }
+        public Delimitateur(int id, string mot_cles, string lang,int position )
         {
             this.id = id;
             this.mot_cles = mot_cles;
             this.lang = lang;
+            this.position = position;
         }
     }
 }
