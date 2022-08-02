@@ -211,10 +211,15 @@ namespace OCR_EXTRA_APP
 
                         File.WriteAllText(first_path, string.Join("\n", resultat2));
                         File.WriteAllText(second_path, string.Join("\n", resultat3));
-                        Process_OCR.Get_model(resultat3,2);
-                        
+                        List<Delimitateur> list = Process_OCR.GetExtraction_delimitateur(resultat2);
+                        List<Delimitateur> delimitateurs = Process_OCR.GetExtraction_delimitateur(resultat3);
+                     
+                        //foreach (Delimitateur delimitateur in delimitateurs)
+                        //{
+                        //    Trace.WriteLine(delimitateur.mot_cles);
+                        //}
+                        Process_OCR.Get_model(resultat3, 2);
                     }
-                    
                 }
                 else
                 {

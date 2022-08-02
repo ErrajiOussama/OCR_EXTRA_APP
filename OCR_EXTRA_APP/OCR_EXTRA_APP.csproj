@@ -31,6 +31,9 @@
     <None Update="config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="SQL\Get_num_delimitateur_from_matrice.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="SQL\Get_matrice.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

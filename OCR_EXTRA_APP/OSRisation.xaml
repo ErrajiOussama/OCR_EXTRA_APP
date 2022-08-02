@@ -45,7 +45,7 @@
 
 
             <TextBox KeyUp="search_KeyUp"  BorderBrush="Transparent" Width="120" x:Name="search" Margin=" 200 0 40 0" Background="White"/>
-            <ComboBox Width="100"  x:Name="combo2"  BorderBrush="Transparent" SelectedIndex="0">
+            <ComboBox KeyUp="search_KeyUp" Width="100"  x:Name="combo2"  BorderBrush="Transparent" SelectedIndex="0">
                 <ComboBoxItem >Bureau</ComboBoxItem>
                 <ComboBoxItem >Commun</ComboBoxItem>
                 <ComboBoxItem >Lot</ComboBoxItem>

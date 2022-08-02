@@ -17,10 +17,10 @@ namespace OCR_EXTRA_APP.CS
     {
         public static void Get_model(string[] acte_ocriser,int num_page)
         {
-            GetExtraction_delimitateur(acte_ocriser);
             string _connectbase = "";
+            int comp3 = 0;
             int comp1 = 0;
-            int comp2 = 0;
+            int num = 0;
             try
             {
                 var builder = new ConfigurationBuilder().AddJsonFile($"./config.json").Build();
@@ -32,37 +32,35 @@ namespace OCR_EXTRA_APP.CS
                     npgadapter.Fill(dt);
                     List<Matrice> matriceList = Hlp.converting_matrice(dt);
                     List<Delimitateur> delimitateurs = GetExtraction_delimitateur(acte_ocriser);
-                    foreach(Delimitateur delimitateur in delimitateurs)
+                    comp3 = Hlp.number_delimitateur(num_page);
+                    num = Hlp.number_of_matrice(dt);
+                    for(int i = 2; i < num+1; i++)
                     {
                         foreach(Matrice matrice in matriceList)
                         {
-                            if (matrice.num_page == num_page.ToString())
+                            foreach ( Delimitateur delimitateur in delimitateurs)
                             {
-                                if (matrice.position == delimitateur.position.ToString())
+                                if(Int32.Parse(matrice.id_model) == i)
                                 {
-                                    comp1++;
-                                }
-                                if (matrice.iddelimitateur1 == delimitateur.id.ToString())
-                                {
-                                    comp2++;
+                                    if (Int32.Parse(matrice.num_page) == num_page )
+                                    {                                        
+                                        if (matrice.position == delimitateur.position.ToString())
+                                        {
+                                            comp1++;
+                                        }
+                                        if (matrice.iddelimitateur1 == delimitateur.id.ToString())
+                                        {
+                                            comp1++;
+                                        }
+                                    }         
                                 }
                             }
                         }
-                        
-                    }
-                    if (num_page == 1)
-                    {
-                        double taux_id = (comp1 / 7.0) * 100;
-                        double taux_position = (comp2 / 7.0) * 100;
-                        Trace.WriteLine(taux_id);
-                        Trace.WriteLine(taux_position);
-                    }
-                    else
-                    {
-                        double taux_id = (comp1 / 27.0) * 100;
-                        double taux_position = (comp2 / 27.0) * 100;
-                        Trace.WriteLine(taux_id);
-                        Trace.WriteLine(taux_position);
+                        Trace.WriteLine(comp1);
+                        Trace.WriteLine(comp3);
+                        double taux_finaux2 = ((float)comp1 / (comp3*2))*100 ;
+                        Trace.WriteLine(taux_finaux2);
+                        comp1 = 0;
                     }
                 }
             }
