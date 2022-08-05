@@ -21,7 +21,7 @@ namespace OCR_EXTRA_APP
         
         Etat_Civil etat_civil;
         Correction correction;
-        OSRisation ocrisation;
+        OCRisation ocrisation;
         Parametre paramatrie;
         private void ButtonOpenMenu_Click(object sender, RoutedEventArgs e)
         {
@@ -71,7 +71,7 @@ namespace OCR_EXTRA_APP
                     MainFrame.Navigate(correction);
                 }
             }
-            private void menuOSResation_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+            private void menuOCResation_MouseDoubleClick(object sender, MouseButtonEventArgs e)
             {
                 if (ocrisation != null)
                 {
@@ -79,7 +79,7 @@ namespace OCR_EXTRA_APP
                 }
                 else
                 {
-                    ocrisation = new OSRisation();
+                    ocrisation = new OCRisation();
                     MainFrame.Navigate(ocrisation);
                 }
             }

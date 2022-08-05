@@ -84,15 +84,15 @@
                         <TextBlock FontWeight="Bold"><Run Text="CORRECTION"/></TextBlock>
                     </StackPanel>
                 </ListViewItem>
-                <ListViewItem x:Name="menudOSResation"
-                             MouseDoubleClick="menuOSResation_MouseDoubleClick"
+                <ListViewItem x:Name="menudOCResation"
+                             MouseDoubleClick="menuOCResation_MouseDoubleClick"
                              Padding="0 10"
                              Foreground="White"
                               Margin="5 2">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 
                         <materialDesign:PackIcon Kind="BarcodeScanner" Height="24" Width="24" Margin="0 0 20 0"/>
-                        <TextBlock FontWeight="Bold"><Run Text="OSRISATION"/></TextBlock>
+                        <TextBlock FontWeight="Bold"><Run Text="OCRISATION"/></TextBlock>
                     </StackPanel>
                 </ListViewItem>
                 <ListViewItem x:Name="menuPrametrie"

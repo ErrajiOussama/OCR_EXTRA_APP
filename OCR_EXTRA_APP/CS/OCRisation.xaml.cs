@@ -23,14 +23,14 @@ namespace OCR_EXTRA_APP
     /// <summary>
     /// Interaction logic for OSRisation.xaml
     /// </summary>
-    public partial class OSRisation : System.Windows.Controls.Page
+    public partial class OCRisation : System.Windows.Controls.Page
     {
         DataTable _dataTableListLot;
         string _connexionString = "";
         string[] _pathTexte;
         string[] _pathImageRepository;
         string _Extra;
-        public OSRisation()
+        public OCRisation()
         {
             InitializeComponent();
             Load_Lots();
