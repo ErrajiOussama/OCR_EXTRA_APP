@@ -96,8 +96,8 @@ namespace OCR_EXTRA_APP.CS
                     {
                         foreach (Delimitateur delimitateur in resultat)
                         {
-                            Regex regex = new Regex(delimitateur.mot_cles);
-                            if (regex.IsMatch(acte_ocriser[i]))
+                            Regex regex = new Regex(delimitateur.mot_cles.Trim());
+                            if (regex.IsMatch(acte_ocriser[i].Trim()))
                             {
                                 comp++;
                                 Delimitateur delimitateur_cles = new Delimitateur(delimitateur.id, delimitateur.mot_cles, delimitateur.lang,comp);

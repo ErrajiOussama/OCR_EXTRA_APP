@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OCR_EXTRA_APP.CS
+namespace OCR_EXTRA_APP.models
 {
     internal class Pourssantage
     {
