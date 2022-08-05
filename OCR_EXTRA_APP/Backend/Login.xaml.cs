@@ -20,7 +20,7 @@ namespace OCR_EXTRA_APP
             try
             {
                 // Chargement de la chaine de connexion
-                var builder = new ConfigurationBuilder().AddJsonFile($"./config.json").Build();
+                var builder = new ConfigurationBuilder().AddJsonFile($"DATA/config.json").Build();
                 _connexionString = builder["ConnexionString"];
             }
             catch (Exception ex)

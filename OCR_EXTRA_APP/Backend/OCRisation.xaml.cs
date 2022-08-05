@@ -39,7 +39,7 @@ namespace OCR_EXTRA_APP
         {
             try
             {
-                var builder = new ConfigurationBuilder().AddJsonFile($"./config.json").Build();
+                var builder = new ConfigurationBuilder().AddJsonFile($"DATA/config.json").Build();
                 _connexionString = builder["ConnexionString2"];
                 _pathImageRepository = builder.GetSection("ListPaths").GetChildren().AsEnumerable().Select(e => e.Value).ToArray<string>();
                 _Extra = builder["ConnexionString3"];
@@ -138,7 +138,7 @@ namespace OCR_EXTRA_APP
             {
                 try
                 {
-                    var builder = new ConfigurationBuilder().AddJsonFile($"./config.json").Build();
+                    var builder = new ConfigurationBuilder().AddJsonFile($"DATA/config.json").Build();
                     _connexionString = builder["ConnexionString2"];
                     var sql = (new StreamReader(@"SQL/Get_Lots.sql")).ReadToEnd();
                     using (var npgsqlDataAdapter = new NpgsqlDataAdapter(sql, _connexionString))
@@ -176,7 +176,7 @@ namespace OCR_EXTRA_APP
                 string _id_lot = dataRow["id_Lot"].ToString();
                 string _path_image_acte = "";
                 string id_acte = "";
-                var builder = new ConfigurationBuilder().AddJsonFile($"./config.json").Build();
+                var builder = new ConfigurationBuilder().AddJsonFile($"DATA/config.json").Build();
                 _connexionString = builder["ConnexionString2"];
                 Random random = new Random();
                 var sql = (new StreamReader(@"SQL/Get_random_acte.sql")).ReadToEnd().Replace("@lots", _id_lot);

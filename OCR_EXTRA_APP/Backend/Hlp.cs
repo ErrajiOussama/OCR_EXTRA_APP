@@ -42,7 +42,7 @@ namespace OCR_EXTRA_APP.CS
             string _connectbase = "";
             try
             {
-                var builder = new ConfigurationBuilder().AddJsonFile($"./config.json").Build();
+                var builder = new ConfigurationBuilder().AddJsonFile($"DATA/config.json").Build();
                 _connectbase = builder["ConnexionString"];
                 var sql = (new StreamReader(@"SQL/Get_num_delimitateur_from_matrice.sql")).ReadToEnd().Replace("@num_page", test.ToString()).Replace("@id_modele",id_modele.ToString());
                 using (var npgadapter = new NpgsqlDataAdapter(sql, _connectbase))
@@ -76,7 +76,7 @@ namespace OCR_EXTRA_APP.CS
             string _connectbase = "";
             try
             {
-                var builder = new ConfigurationBuilder().AddJsonFile($"./config.json").Build();
+                var builder = new ConfigurationBuilder().AddJsonFile($"DATA/config.json").Build();
                 _connectbase = builder["ConnexionString"];
                
                 double max = 0;

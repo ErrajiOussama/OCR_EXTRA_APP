@@ -23,7 +23,7 @@ namespace OCR_EXTRA_APP.CS
             int num = 0;
             try
             {
-                var builder = new ConfigurationBuilder().AddJsonFile($"./config.json").Build();
+                var builder = new ConfigurationBuilder().AddJsonFile($"DATA/config.json").Build();
                 _connectbase = builder["ConnexionString"];
                 var sql = (new StreamReader(@"SQL/Get_matrice.sql")).ReadToEnd();
                 List<Pourssantage> pourssantages = new List<Pourssantage>(); 
@@ -83,7 +83,7 @@ namespace OCR_EXTRA_APP.CS
             List<Delimitateur> list_delimitateur = new List<Delimitateur>();
             try
             {
-                var builder = new ConfigurationBuilder().AddJsonFile($"./config.json").Build();
+                var builder = new ConfigurationBuilder().AddJsonFile($"DATA/config.json").Build();
                 _connexionbase = builder["ConnexionString"];
                 var sql = (new StreamReader(@"SQL/Get_delimitateur.sql")).ReadToEnd();
                 using (var npgadapter = new NpgsqlDataAdapter(sql, _connexionbase))

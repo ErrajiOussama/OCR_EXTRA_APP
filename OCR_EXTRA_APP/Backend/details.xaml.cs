@@ -30,7 +30,7 @@ namespace OCR_EXTRA_APP
             #region cnx avec la base de donner 
             try
             {
-                var builder = new ConfigurationBuilder().AddJsonFile($"./config.json").Build();
+                var builder = new ConfigurationBuilder().AddJsonFile($"DATA/config.json").Build();
                 _connexionString = builder["ConnexionString2"];
                 _pathImageRepository = builder.GetSection("ListPaths").GetChildren().AsEnumerable().Select(e => e.Value).ToArray<string>();
                 _Extra = builder["ConnexionString3"];
