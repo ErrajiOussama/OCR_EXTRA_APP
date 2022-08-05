@@ -26,15 +26,16 @@ namespace OCR_EXTRA_APP.CS
                 var builder = new ConfigurationBuilder().AddJsonFile($"./config.json").Build();
                 _connectbase = builder["ConnexionString"];
                 var sql = (new StreamReader(@"SQL/Get_matrice.sql")).ReadToEnd();
+                List<Pourssantage> pourssantages = new List<Pourssantage>(); 
                 using (var npgadapter = new NpgsqlDataAdapter(sql, _connectbase))
                 {
                     DataTable dt = new DataTable();
                     npgadapter.Fill(dt);
                     List<Matrice> matriceList = Hlp.converting_matrice(dt);
                     List<Delimitateur> delimitateurs = GetExtraction_delimitateur(acte_ocriser);
-                    comp3 = Hlp.number_delimitateur(num_page);
                     num = Hlp.number_of_matrice(dt);
-                    for(int i = 2; i < num+1; i++)
+                    Trace.WriteLine(num);
+                    for(int i = 2; i <= num+1; i++)
                     {
                         foreach(Matrice matrice in matriceList)
                         {
@@ -42,26 +43,33 @@ namespace OCR_EXTRA_APP.CS
                             {
                                 if(Int32.Parse(matrice.id_model) == i)
                                 {
+                                    if (i == 4)
+                                    {
+                                        Trace.WriteLine(num);
+                                    }
+                                    comp3 = Hlp.number_delimitateur(num_page, Int32.Parse(matrice.id_model));
+                                   
                                     if (Int32.Parse(matrice.num_page) == num_page )
                                     {                                        
-                                        if (matrice.position == delimitateur.position.ToString())
+                                        if (matrice.position == delimitateur.position.ToString() && matrice.iddelimitateur1 == delimitateur.id.ToString())
                                         {
                                             comp1++;
                                         }
-                                        if (matrice.iddelimitateur1 == delimitateur.id.ToString())
-                                        {
-                                            comp1++;
-                                        }
+                                        
                                     }         
                                 }
                             }
                         }
-                        Trace.WriteLine(comp1);
+                        Trace.WriteLine(comp1);                        
                         Trace.WriteLine(comp3);
-                        double taux_finaux2 = ((float)comp1 / (comp3*2))*100 ;
+                        double taux_finaux2 = ((float)comp1 / comp3)*100;
                         Trace.WriteLine(taux_finaux2);
                         comp1 = 0;
+                        Pourssantage pour = new Pourssantage(i, taux_finaux2);
+                        pourssantages.Add(pour);                       
                     }
+                    Model model = Hlp.detecter_le_model(pourssantages);
+                    Trace.WriteLine(model.id);
                 }
             }
             catch(Exception ex)

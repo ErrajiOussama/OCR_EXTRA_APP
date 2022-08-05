@@ -1,1 +1,1 @@
-﻿select * from matrice where num_page=@num_page  order by _position
+﻿select * from matrice where num_page=@num_page AND id_model=@id_modele order by _position

@@ -36,7 +36,7 @@ namespace OCR_EXTRA_APP.CS
             return matriceList;
         }
 
-        public static int number_delimitateur( int test)
+        public static int number_delimitateur( int test,int id_modele)
         {
             string n = "";
             string _connectbase = "";
@@ -44,7 +44,7 @@ namespace OCR_EXTRA_APP.CS
             {
                 var builder = new ConfigurationBuilder().AddJsonFile($"./config.json").Build();
                 _connectbase = builder["ConnexionString"];
-                var sql = (new StreamReader(@"SQL/Get_num_delimitateur_from_matrice.sql")).ReadToEnd().Replace("@num_page", test.ToString());
+                var sql = (new StreamReader(@"SQL/Get_num_delimitateur_from_matrice.sql")).ReadToEnd().Replace("@num_page", test.ToString()).Replace("@id_modele",id_modele.ToString());
                 using (var npgadapter = new NpgsqlDataAdapter(sql, _connectbase))
                 {
                     DataTable data = new DataTable();
@@ -70,6 +70,44 @@ namespace OCR_EXTRA_APP.CS
                 n = dr["id_model"].ToString();
             }
             return Int32.Parse(n);
+        }
+        public static Model detecter_le_model(List<Pourssantage> pourssantages )
+        {
+            string _connectbase = "";
+            try
+            {
+                var builder = new ConfigurationBuilder().AddJsonFile($"./config.json").Build();
+                _connectbase = builder["ConnexionString"];
+               
+                double max = 0;
+                foreach(Pourssantage pourssantage in pourssantages)
+                {
+                    if (pourssantage.pourssantage > max)
+                    {
+                        max = pourssantage.pourssantage;
+                    }
+                }
+                foreach(Pourssantage pourssantage in pourssantages)
+                {
+                    if (pourssantage.pourssantage == max)
+                    {
+                        var sql2 = (new StreamReader(@"SQL/Get_modele.sql")).ReadToEnd().Replace("@id_modele",pourssantage.id_model.ToString())
+;                       using (var dataAdapter = new NpgsqlDataAdapter(sql2, _connectbase))
+                        {
+                            DataTable dataTable = new DataTable();
+                            dataAdapter.Fill(dataTable);
+                            Model model = new Model(Int32.Parse(dataTable.Rows[0]["id"].ToString()), dataTable.Rows[0]["type_model"].ToString(), dataTable.Rows[0]["version_model"].ToString());
+                            return model;
+                        }
+                        
+                    }
+                }
+                return null;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
