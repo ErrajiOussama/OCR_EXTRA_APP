@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="icons\logo.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Google.Cloud.Vision.V1" Version="2.5.0" />
     <PackageReference Include="IronOcr" Version="2022.3.0" />
     <PackageReference Include="IronOcr.Languages.Arabic" Version="2020.11.2" />
@@ -22,19 +18,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="icons\logo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="DATA\config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SQL\Get_modele.sql">
+    <None Update="icons\logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SQL\Get_num_delimitateur_from_matrice.sql">
+    <None Update="SQL\get_colums_acte_ocr.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SQL\Get_modele.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SQL\Get_matrice.sql">

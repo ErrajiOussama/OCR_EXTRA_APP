@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OCR_EXTRA_APP"
         mc:Ignorable="d"
-        Title="Login" Height="550" Width="400">
+        Title="Login" Height="400" Width="400">
     <StackPanel Margin="20 20 20 20">
         <!-- Le titre de l'application -->
-        <TextBlock  FontSize="36" Text="BIENVENUE" HorizontalAlignment="Center" Margin="0 0 0 0"/>
+        <TextBlock  FontSize="36" Text="OCR" HorizontalAlignment="Center" Margin="0 0 0 0"/>
         <!-- Partie de saisie de l'Email -->
         <Grid Margin="0 50 0 10">
             <TextBlock Text="UserName"  Margin="40 50 0 0 "/>

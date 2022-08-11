@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Npgsql;
 using OCR_EXTRA_APP.models;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -15,7 +16,7 @@ namespace OCR_EXTRA_APP.CS
 {
     internal class Process_OCR
     {
-        public static void Get_model(string[] acte_ocriser,int num_page)
+        public static Model Get_model(string[] acte_ocriser,int num_page)
         {
             string _connectbase = "";
             int comp3 = 0;
@@ -34,7 +35,7 @@ namespace OCR_EXTRA_APP.CS
                     List<Matrice> matriceList = Hlp.converting_matrice(dt);
                     List<Delimitateur> delimitateurs = GetExtraction_delimitateur(acte_ocriser);
                     num = Hlp.number_of_matrice(dt);
-                    Trace.WriteLine(num);
+                   
                     for(int i = 2; i <= num+1; i++)
                     {
                         foreach(Matrice matrice in matriceList)
@@ -43,25 +44,20 @@ namespace OCR_EXTRA_APP.CS
                             {
                                 if(Int32.Parse(matrice.id_model) == i)
                                 {
-                                    if (i == 4)
-                                    {
-                                        Trace.WriteLine(num);
-                                    }
+                                 
                                     comp3 = Hlp.number_delimitateur(num_page, Int32.Parse(matrice.id_model));
                                    
                                     if (Int32.Parse(matrice.num_page) == num_page )
                                     {                                        
-                                        if (matrice.position == delimitateur.position.ToString() && matrice.iddelimitateur1 == delimitateur.id.ToString())
+                                        if (matrice.position == delimitateur.position && matrice.iddelimitateur1 == delimitateur.id.ToString())
                                         {
                                             comp1++;
                                         }
-                                        
                                     }         
                                 }
                             }
                         }
-                        Trace.WriteLine(comp1);                        
-                        Trace.WriteLine(comp3);
+       
                         double taux_finaux2 = ((float)comp1 / comp3)*100;
                         Trace.WriteLine(taux_finaux2);
                         comp1 = 0;
@@ -69,7 +65,7 @@ namespace OCR_EXTRA_APP.CS
                         pourssantages.Add(pour);                       
                     }
                     Model model = Hlp.detecter_le_model(pourssantages);
-                    Trace.WriteLine(model.id);
+                    return model;
                 }
             }
             catch(Exception ex)
@@ -77,6 +73,8 @@ namespace OCR_EXTRA_APP.CS
                 throw ex;
             }
         }
+
+
         public static List<Delimitateur> GetExtraction_delimitateur(string[] acte_ocriser)
         {
             string _connexionbase = "";
@@ -112,6 +110,81 @@ namespace OCR_EXTRA_APP.CS
             {
                 throw ex;
             }
+        }
+
+        public static List<Values> Get_extraction_values(string[] acte_ocriser, int num_page)
+        {
+            List<Values> values = new List<Values>();
+            int i=5;
+            string[] names = Hlp.get_name_colums();
+            Model model = Get_model(acte_ocriser, num_page);
+            Values values1 = get_num_acte(acte_ocriser, num_page);
+            values.Add(values1);
+            List<Pourssantage> pourssantages = new List<Pourssantage>();
+            List<Matrice> matrices = Hlp.remplissage_de_valeur_delimitateur(num_page, model.id, acte_ocriser);
+            matrices.Where(m=>m.iddelimitateur1 != "1").ToList().ForEach(m =>
+            {
+                // Method 1
+                var val = getExtractSameLine(m, acte_ocriser);
+
+                // Method 2
+                //if(string.IsNullOrWhiteSpace(val))
+                //{
+                //    val = getExtractionLineAfter(matrices, m, acte_ocriser);
+                //}
+                values.Add(new Values(names[i], val));
+                i++;
+            });        
+            foreach (var val in values)
+            {
+                Trace.WriteLine($"{val.nom_de_champ} : {val.valeur}");
+            }
+            return values;
+        }
+        
+        public static string getExtractSameLine(Matrice m, string[] acte_ocriser)
+        {
+            return acte_ocriser.Any(a => Regex.IsMatch(a, $"^{m.iddelimitateur1_val}")) ?
+                acte_ocriser.FirstOrDefault(a => Regex.IsMatch(a, $"^{m.iddelimitateur1_val}"))
+                .Replace($"^{m.iddelimitateur1_val}", "")
+                : "";
+        }
+
+        public static string getExtractionLineAfter(List<Matrice> matrices,Matrice m, string[] acte_ocriser)
+        {
+            var delimit2_m2 = matrices.Any(m1 => m1.position > m.position) ? matrices.FirstOrDefault(m1 => m1.position > m.position).iddelimitateur1_val : "";
+            var lignes = Regex.IsMatch(string.Join(" ", acte_ocriser), $"[{m.iddelimitateur1_val}]([aA-zZ]|[\u0621-\u064A\u0660-\u0669])+([{m.iddelimitateur2_val}]|[{delimit2_m2}])") ? "fouded" : "";
+            return lignes;
+        }
+
+        public static Values get_num_acte(string[] acte_ocriser,int num_page)
+        {
+            Values values = new Values();
+            var regex = new Regex("[0-9]");
+            string[] names = Hlp.get_name_colums();
+            if (num_page == 1)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    if (regex.IsMatch(acte_ocriser[i]))
+                    {
+                        values = new Values(names[4], acte_ocriser[i]);                               
+                    }
+                }
+                return values;
+            }
+            else
+            {
+                for (int i = 0; i < 20; i++)
+                {
+                    if (regex.IsMatch(acte_ocriser[i]))
+                    {
+                        Values values1 = new Values(names[4], acte_ocriser[i]);
+                        return values1;
+                    }
+                }
+            }
+            return null;
         }
         public static async Task<string[]> getOCRImage(string pathimage)
         {
