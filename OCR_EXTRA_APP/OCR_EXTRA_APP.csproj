@@ -24,6 +24,15 @@
     <None Update="icons\logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="SQL\get_num_acte_ocr.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SQL\INSERT.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SQL\Get_Actes _OCR.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="SQL\get_colums_acte_ocr.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

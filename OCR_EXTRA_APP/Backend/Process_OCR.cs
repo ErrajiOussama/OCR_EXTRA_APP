@@ -36,7 +36,7 @@ namespace OCR_EXTRA_APP.CS
                     List<Delimitateur> delimitateurs = GetExtraction_delimitateur(acte_ocriser);
                     num = Hlp.number_of_matrice(dt);
                    
-                    for(int i = 2; i <= num+1; i++)
+                    for(int i = 2; i <= num+2; i++)
                     {
                         foreach(Matrice matrice in matriceList)
                         {
@@ -59,7 +59,6 @@ namespace OCR_EXTRA_APP.CS
                         }
        
                         double taux_finaux2 = ((float)comp1 / comp3)*100;
-                        Trace.WriteLine(taux_finaux2);
                         comp1 = 0;
                         Pourssantage pour = new Pourssantage(i, taux_finaux2);
                         pourssantages.Add(pour);                       
@@ -112,34 +111,66 @@ namespace OCR_EXTRA_APP.CS
             }
         }
 
-        public static List<Values> Get_extraction_values(string[] acte_ocriser, int num_page)
+        public static void Get_extraction_values(string[] acte_ocriser, int num_page, string id_acte)
         {
-            List<Values> values = new List<Values>();
-            int i=5;
-            string[] names = Hlp.get_name_colums();
-            Model model = Get_model(acte_ocriser, num_page);
-            Values values1 = get_num_acte(acte_ocriser, num_page);
-            values.Add(values1);
-            List<Pourssantage> pourssantages = new List<Pourssantage>();
-            List<Matrice> matrices = Hlp.remplissage_de_valeur_delimitateur(num_page, model.id, acte_ocriser);
-            matrices.Where(m=>m.iddelimitateur1 != "1").ToList().ForEach(m =>
+            string connexion="";
+            try
             {
-                // Method 1
-                var val = getExtractSameLine(m, acte_ocriser);
+                var builder = new ConfigurationBuilder().AddJsonFile($"DATA/config.json").Build();
+                connexion = builder["ConnexionString"];
+                List<Values> values = new List<Values>();
+                int i=4;
+                string[] names = Hlp.get_name_colums();
+                
+                Model model = Get_model(acte_ocriser, num_page);
+                Values values1 = get_num_acte(acte_ocriser, num_page);
+                Values values2 = new Values(names[0], id_acte);
+                Trace.WriteLine(values2.nom_de_champ);
+                Trace.WriteLine(values1.nom_de_champ);
+                values.Add(values2);
+                values.Add(values1);
+                List<Pourssantage> pourssantages = new List<Pourssantage>();
+                List<Matrice> matrices = Hlp.remplissage_de_valeur_delimitateur(num_page, model.id, acte_ocriser);
+                
+                matrices.Where(m=>m.iddelimitateur1 != "1").ToList().ForEach(m =>
+                {
+                    // Method 1
+                    var val = getExtractSameLine(m, acte_ocriser);
 
-                // Method 2
-                //if(string.IsNullOrWhiteSpace(val))
-                //{
-                //    val = getExtractionLineAfter(matrices, m, acte_ocriser);
-                //}
-                values.Add(new Values(names[i], val));
-                i++;
-            });        
-            foreach (var val in values)
-            {
-                Trace.WriteLine($"{val.nom_de_champ} : {val.valeur}");
+                    //Method 2
+                    if (string.IsNullOrWhiteSpace(val))
+                    {
+                        val = getExtractionLineAfter(matrices, m, acte_ocriser);
+                    }
+                    values.Add(new Values(names[i], val));
+                    i++;
+                });
+                using (NpgsqlConnection conn = new NpgsqlConnection(connexion))
+                {
+                    conn.Open();
+                    string champs = "";
+                    string valeurs = "";
+                    foreach (Values val in values)
+                    {
+                        champs += values.Count == (values.IndexOf(val) + 1) ? $"{val.nom_de_champ}" : $"{val.nom_de_champ},";
+                        valeurs += values.Count == (values.IndexOf(val) + 1) ? $"'{val.valeur}'" : $"'{val.valeur}',";
+                    }
+
+                    var sql = (new StreamReader(@"SQL/INSERT.sql")).ReadToEnd().Replace("@id_acte",id_acte).Replace("@nom_de_champ", champs).Replace("@valeur",valeurs);
+                    using (var cmd = new NpgsqlCommand(sql, conn))
+                    {
+                        var reader = cmd.ExecuteNonQuery();
+                    }
+                }
+
             }
-            return values;
+            
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+           
+            
         }
         
         public static string getExtractSameLine(Matrice m, string[] acte_ocriser)
@@ -168,7 +199,7 @@ namespace OCR_EXTRA_APP.CS
                 {
                     if (regex.IsMatch(acte_ocriser[i]))
                     {
-                        values = new Values(names[4], acte_ocriser[i]);                               
+                        values = new Values(names[3], acte_ocriser[i]);                               
                     }
                 }
                 return values;
@@ -179,7 +210,7 @@ namespace OCR_EXTRA_APP.CS
                 {
                     if (regex.IsMatch(acte_ocriser[i]))
                     {
-                        Values values1 = new Values(names[4], acte_ocriser[i]);
+                        Values values1 = new Values(names[3], acte_ocriser[i]);
                         return values1;
                     }
                 }

@@ -1,0 +1,1 @@
+﻿select num_acte from acte_ocr

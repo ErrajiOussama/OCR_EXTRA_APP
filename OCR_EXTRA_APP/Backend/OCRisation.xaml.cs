@@ -175,6 +175,7 @@ namespace OCR_EXTRA_APP
                 DataRowView dataRow = LotsList.SelectedItem as DataRowView;
                 string _id_lot = dataRow["id_Lot"].ToString();
                 string _path_image_acte = "";
+                
                 string id_acte = "";
                 var builder = new ConfigurationBuilder().AddJsonFile($"DATA/config.json").Build();
                 _connexionString = builder["ConnexionString2"];
@@ -215,15 +216,22 @@ namespace OCR_EXTRA_APP
                         List<Delimitateur> delimitateurs = Process_OCR.GetExtraction_delimitateur(resultat3);
                         string[] resultat1 = Hlp.delet_caracter(resultat2);
                         string[] res2 = Hlp.delet_caracter(resultat3);                                       
-                        Process_OCR.Get_extraction_values(res2, 2);
+                        Process_OCR.Get_extraction_values(res2, 2, id_acte);
                     }
                 }
                 else
                 {
                     MessageBox.Show("Charger une image", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
+                if (LotsList.SelectedItem != null)
+                {
+                    DataRowView datarow = LotsList.SelectedItem as DataRowView;
+                    OCRiser  oCRiser= new OCRiser(datarow["id_lot"].ToString());
+                    oCRiser.Show();
+                }
             }
-            
+             
+
             catch (Exception ex)
             {
                     Trace.WriteLine(ex);
