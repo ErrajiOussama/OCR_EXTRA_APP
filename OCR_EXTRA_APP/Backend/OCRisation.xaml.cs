@@ -175,12 +175,15 @@ namespace OCR_EXTRA_APP
                 DataRowView dataRow = LotsList.SelectedItem as DataRowView;
                 string _id_lot = dataRow["id_Lot"].ToString();
                 string _path_image_acte = "";
+                string[] path_images_actes=new string[184];
+                string[] _id_actes = new string[184];
                 
                 string id_acte = "";
                 var builder = new ConfigurationBuilder().AddJsonFile($"DATA/config.json").Build();
                 _connexionString = builder["ConnexionString2"];
                 Random random = new Random();
                 var sql = (new StreamReader(@"SQL/Get_random_acte.sql")).ReadToEnd().Replace("@lots", _id_lot);
+                var sql1 = (new StreamReader(@"SQL/Get_num_acte.sql")).ReadToEnd().Replace("@lots", _id_lot);
                 using (var npgsqlDataAdapter = new NpgsqlDataAdapter(sql, _connexionString))
                 {
                     DataTable dataTable = new DataTable();
@@ -188,45 +191,65 @@ namespace OCR_EXTRA_APP
                     _path_image_acte = dataTable.Rows[0]["imagepath"].ToString();
                     id_acte = dataTable.Rows[0]["id_acte"].ToString();
                 }
+                using (var npgsqlDataAdapter = new NpgsqlDataAdapter(sql1, _connexionString))
+                {
+                    DataTable dataTable = new DataTable();
+                    npgsqlDataAdapter.Fill(dataTable);
+                    int i = 0;
+                    foreach(DataRow row in dataTable.Rows)
+                    {
+                    path_images_actes[i] = dataTable.Rows[i]["imagepath"].ToString();
+                    _id_actes[i] = dataTable.Rows[i]["id_acte"].ToString();
+                        i++;
+                    }
+                    for(i = 0; i < path_images_actes.Length; i++)
+                    {
+                        Trace.WriteLine(path_images_actes[i]);
+                        Trace.WriteLine(_id_actes[i]);
+                    }
+                }
 
                 if (!string.IsNullOrEmpty(_id_lot))
                 {
-                    Acces_Images acces_Images = new Acces_Images();
-                    FlowDocument flowDocument = new FlowDocument();
-                    string _path = acces_Images.getPathLot(_id_lot, _Extra, _pathImageRepository);
-                    string[] path_image1 = _path_image_acte.Split(";;").Where(e => !string.IsNullOrWhiteSpace(e)).ToArray();
-                    if (path_image1.Length == 1)
-                    {
-                        string[] resultat1 =  await Process_OCR.getOCRImage(Path.Combine(_path, path_image1[0]));
-                        File.WriteAllText(Path.Combine(_pathTexte[0], $"{_id_lot}_{id_acte}_{path_image1[0].Replace("jpg","txt")}"), string.Join("\n", resultat1));
-                    }
-                    else
-                    {
-                        string imagepath1 = path_image1[0];
-                        string imagepath2 = path_image1[1];
-                        string[] resultat2 = await Process_OCR.getOCRImage(Path.Combine(_path, imagepath1));
-                        string[] resultat3 = await Process_OCR.getOCRImage(Path.Combine(_path, imagepath2));
-                        string Actes = _id_lot + imagepath1.Replace("jpg", "txt");
-                        string first_path = Path.Combine(Path.Combine(_pathTexte[0],Actes ));
-                        string second_path = Path.Combine(Path.Combine(_pathTexte[0], _id_lot + "_" + imagepath2.Replace("jpg", "txt")));
-
-                        File.WriteAllText(first_path, string.Join("\n", resultat2));
-                        File.WriteAllText(second_path, string.Join("\n", resultat3));
-                        List<Delimitateur> list = Process_OCR.GetExtraction_delimitateur(resultat2);
-                        List<Delimitateur> delimitateurs = Process_OCR.GetExtraction_delimitateur(resultat3);
-                        string[] resultat1 = Hlp.delet_caracter(resultat2);
-                        string[] res2 = Hlp.delet_caracter(resultat3);                                       
-                        Process_OCR.Get_extraction_values(res2, 2, id_acte);
-                    }
-                }
+                  
+                        Acces_Images acces_Images = new Acces_Images();
+                        FlowDocument flowDocument = new FlowDocument();
+                        string _path = acces_Images.getPathLot(_id_lot, _Extra, _pathImageRepository);
+                        string[] path_image1 = _path_image_acte.Split(";;").Where(e => !string.IsNullOrWhiteSpace(e)).ToArray();
+                        if (path_image1.Length == 1)
+                        {
+                            string[] resultat1 = await Process_OCR.getOCRImage(Path.Combine(_path, path_image1[0]));
+                            File.WriteAllText(Path.Combine(_pathTexte[0], $"{_id_lot}_{id_acte}_{path_image1[0].Replace("jpg", "txt")}"), string.Join("\n", resultat1));
+                        }
+                        else
+                        {
+                            string imagepath1 = path_image1[0];
+                            string imagepath2 = path_image1[1];
+                            string[] resultat2 = await Process_OCR.getOCRImage(Path.Combine(_path, imagepath1));
+                            string[] resultat3 = await Process_OCR.getOCRImage(Path.Combine(_path, imagepath2));
+                            string Actes = _id_lot + imagepath1.Replace("jpg", "txt");
+                            string first_path = Path.Combine(Path.Combine(_pathTexte[0], Actes));
+                            string second_path = Path.Combine(Path.Combine(_pathTexte[0], _id_lot + "_" + imagepath2.Replace("jpg", "txt")));
+                            File.WriteAllText(first_path, string.Join("\n", resultat2));
+                            File.WriteAllText(second_path, string.Join("\n", resultat3));
+                            List<Delimitateur> list = Process_OCR.GetExtraction_delimitateur(resultat2);
+                            List<Delimitateur> delimitateurs = Process_OCR.GetExtraction_delimitateur(resultat3);
+                            string[] resultat1 = Hlp.delet_caracter(resultat2);
+                            string[] res2 = Hlp.delet_caracter(resultat3);
+                            Process_OCR.Get_extraction_values(res2, 2, id_acte,_id_lot);
+                        }
+                    }  
+                
+                
                 else
                 {
                     MessageBox.Show("Charger une image", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
+
                 if (LotsList.SelectedItem != null)
                 {
                     DataRowView datarow = LotsList.SelectedItem as DataRowView;
-                    OCRiser  oCRiser= new OCRiser(datarow["id_lot"].ToString());
+                    OCRiser oCRiser = new OCRiser(datarow["id_lot"].ToString());
                     oCRiser.Show();
                 }
             }

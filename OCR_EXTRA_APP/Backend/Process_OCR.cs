@@ -6,7 +6,6 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -36,7 +35,7 @@ namespace OCR_EXTRA_APP.CS
                     List<Delimitateur> delimitateurs = GetExtraction_delimitateur(acte_ocriser);
                     num = Hlp.number_of_matrice(dt);
                    
-                    for(int i = 2; i <= num+2; i++)
+                    for(int i = 2; i <= num+1; i++)
                     {
                         foreach(Matrice matrice in matriceList)
                         {
@@ -111,7 +110,7 @@ namespace OCR_EXTRA_APP.CS
             }
         }
 
-        public static void Get_extraction_values(string[] acte_ocriser, int num_page, string id_acte)
+        public static void Get_extraction_values(string[] acte_ocriser, int num_page, string id_acte,string _id_lot)
         {
             string connexion="";
             try
@@ -125,8 +124,8 @@ namespace OCR_EXTRA_APP.CS
                 Model model = Get_model(acte_ocriser, num_page);
                 Values values1 = get_num_acte(acte_ocriser, num_page);
                 Values values2 = new Values(names[0], id_acte);
-                Trace.WriteLine(values2.nom_de_champ);
-                Trace.WriteLine(values1.nom_de_champ);
+                Values values3 = new Values(names[107], _id_lot);
+                values.Add(values3);
                 values.Add(values2);
                 values.Add(values1);
                 List<Pourssantage> pourssantages = new List<Pourssantage>();
@@ -162,17 +161,35 @@ namespace OCR_EXTRA_APP.CS
                         var reader = cmd.ExecuteNonQuery();
                     }
                 }
-
-            }
-            
+            }            
             catch(Exception ex)
             {
                 throw ex;
             }
-           
-            
         }
         
+        public static void remplicage_lot_ocr(string id_lot) 
+        {
+            string connexion = "";
+
+            try
+            {
+                var builder = new ConfigurationBuilder().AddJsonFile($"DATA/config.json").Build();
+                connexion = builder["ConnexionString"];
+                var sql = (new StreamReader(@"SQL/Get_random_acte.sql")).ReadToEnd().Replace("@lots", id_lot);
+                using (var npgsqlDataAdapter = new NpgsqlDataAdapter(sql, connexion))
+                {
+                    DataTable dataTable = new DataTable();
+                    npgsqlDataAdapter.Fill(dataTable);
+                    
+                }
+
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
         public static string getExtractSameLine(Matrice m, string[] acte_ocriser)
         {
             return acte_ocriser.Any(a => Regex.IsMatch(a, $"^{m.iddelimitateur1_val}")) ?
