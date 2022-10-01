@@ -53,7 +53,7 @@
                         Background="WhiteSmoke"
                     BorderBrush="Orange"
                     BorderThickness="0.5">
-                <Image Source="icons/logo.png"
+                <Image Source="\icons\logo.png"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Height="50"
